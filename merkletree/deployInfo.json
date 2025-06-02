@@ -1,0 +1,15 @@
+{
+  "contractAddress": "0x89508Fcb102915C70945D8948aB8750C9ca09319",
+  "deployerAddress": "0xf18d79589aB226bEd7f35Be727a6A587d359449b",
+  "wlStartTime": 1748836800,
+  "fcfsStartTime": 1748922600,
+  "publicStartTime": 1748922900,
+  "whitelist1": [
+    "0xd0B8cCA831fB606B26BF58BC0bF9B1261a0c7915",
+    "0xf18d79589aB226bEd7f35Be727a6A587d359449b"
+  ],
+  "whitelist2": [
+    "0x0bc2D87d544840908C4529eDccfde9F74B9bd68c"
+  ],
+  "deployTime": "2025-06-02T03:59:29.132Z"
+}

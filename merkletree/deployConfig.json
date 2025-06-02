@@ -1,0 +1,14 @@
+{
+    "wl_start": "07:00",
+    "fcfs_start": "06:50",
+    "public_start": "06:55",
+    "baseURI": "ipfs://bafybeihaobhs7c3ch5f7ylfcqemwymsmpq75lza7cxu74gx7jfmu7czfhy/",
+    "wl1": [
+      "0xd0B8cCA831fB606B26BF58BC0bF9B1261a0c7915",
+       "0xf18d79589aB226bEd7f35Be727a6A587d359449b"
+    ],
+    "wl2": [
+      "0x0bc2D87d544840908C4529eDccfde9F74B9bd68c"
+    ],
+    "royaltyReceiver": "0xe66eDF724cEa3bd1E25F1479BB544bFcc3c1612a"
+}
