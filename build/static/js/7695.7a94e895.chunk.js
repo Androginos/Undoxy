@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkmonbeans_mint=self.webpackChunkmonbeans_mint||[]).push([[7695],{7695:(n,e,s)=>{s.r(e),s.d(e,{default:()=>a.n});var a=s(2499)}}]);
