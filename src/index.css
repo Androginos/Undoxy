@@ -1,1 +1,10 @@
 @tailwind base; @tailwind components; @tailwind utilities;
+
+@import url(https://db.onlinewebfonts.com/c/f020597747c38c0785bbc9873d3b3134?family=PP+Pangram+Sans+Rounded+Narrow+SmBd);
+
+html, body {
+  min-height: 100vh;
+  /* Eski background kaldırıldı */
+  /* body için font-family ayarı */
+  font-family: 'PP Pangram Sans Rounded Narrow SmBd', sans-serif; /* Font adı güncellendi */
+}

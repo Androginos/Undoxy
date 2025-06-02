@@ -3,9 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@abstract-foundation/agw-react": "^1.8.5",
+    "@privy-io/cross-app-connect": "^0.2.1",
+    "@rainbow-me/rainbowkit": "^2.2.5",
+    "@tanstack/query-core": "^5.79.0",
+    "@tanstack/react-query": "^5.79.0",
+    "ethers": "^6.14.0",
+    "keccak256": "^1.0.6",
+    "merkletreejs": "^0.5.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "viem": "^2.30.5",
+    "wagmi": "^2.15.4"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -28,5 +38,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "typescript": "^4.9.5"
   }
 }
