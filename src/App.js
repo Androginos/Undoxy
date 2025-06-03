@@ -16,7 +16,9 @@ import { abstractWallet } from "@abstract-foundation/agw-react/connectors";
 import { ethers } from 'ethers';
 import { BrowserProvider, JsonRpcSigner } from 'ethers';
 
-const CONTRACT_ADDRESS = '0x89508Fcb102915C70945D8948aB8750C9ca09319';
+
+const CONTRACT_ADDRESS = '0x9E956CE0c2ea0BA85BF06c9a0a6c13782d6c87d3';
+
 
 // Wagmi Wallet Client to Ethers.js Signer adapter (from Wagmi docs)
 function clientToSigner(client) {
@@ -141,7 +143,7 @@ function MintPanel() {
     functionName: 'publicMintPrice',
   });
 
-  const { data: totalSupply, isLoading: totalSupplyLoading, isError: totalSupplyError } = useContractRead({
+  const { data: totalSupply, isLoading: totalSupplyLoading, isError: totalSupplyError, refetch: refetchTotalSupply } = useContractRead({
     address: CONTRACT_ADDRESS,
     abi: contractABI,
     functionName: 'totalSupply',
@@ -218,103 +220,106 @@ function MintPanel() {
 
   // Mint işlemi
   const handleMint = async () => {
-    console.log('handleMint called (ethers)');
-    setError(null);
     setMinting(true);
-    
-    if (!connectorClient) {
-      console.error('Wallet not connected or connectorClient not obtained.');
-      setError('Please connect your wallet.');
+
+    if (!isConnected) {
       setMinting(false);
       return;
     }
 
     try {
-      const signer = clientToSigner(connectorClient);
-      const contract = new ethers.Contract(CONTRACT_ADDRESS, contractABI, signer);
+      // Abstract Wallet kontrolü
+      const isAbstractWallet = connectorClient?.type === 'abstract';
+      
+      if (isAbstractWallet) {
+        if (!connectorClient) {
+          setMinting(false);
+          return;
+        }
 
-      let tx;
-      if (currentPhase === "wl") {
-        console.log('Initiating WL phase mint (ethers)');
-        if (!isEligibleWL1) {
-           setError('Not eligible for WL1.');
-           setMinting(false);
-           return;
+        const contract = new ethers.Contract(CONTRACT_ADDRESS, contractABI, connectorClient);
+
+        let tx;
+        if (currentPhase === "wl") {
+          if (!isEligibleWL1 || hasMintedWL1 || !wlMintPrice) {
+            setMinting(false);
+            return;
+          }
+          tx = await contract.mintWL({ value: wlMintPrice });
+        } else if (currentPhase === "fcfs") {
+          if (!isEligibleWL2 || hasMintedWL2 || !fcfsMintPrice) {
+            setMinting(false);
+            return;
+          }
+          tx = await contract.mintFCFS({ value: fcfsMintPrice });
+        } else if (currentPhase === "public") {
+          if (!isEligiblePublic || hasMintedPublic || !publicMintPrice) {
+            setMinting(false);
+            return;
+          }
+          tx = await contract.mintPublic({ value: publicMintPrice });
         }
-        if (hasMintedWL1) {
-           setError('You have already minted in WL1.');
-           setMinting(false);
-           return;
+
+        await tx.wait();
+        
+        // State'leri güncelle
+        if (currentPhase === "wl") {
+          setHasMintedWL1(true);
+        } else if (currentPhase === "fcfs") {
+          setHasMintedWL2(true);
+        } else if (currentPhase === "public") {
+          setHasMintedPublic(true);
         }
-        if (!wlMintPrice) {
-           setError('Mint price could not be loaded.');
-           setMinting(false);
-           return;
-        }
-        tx = await contract.mintWL({ value: wlMintPrice });
-      } else if (currentPhase === "fcfs") {
-        console.log('Initiating FCFS phase mint (ethers)');
-         if (!isEligibleWL2) {
-           setError('Not eligible for WL2 (FCFS).');
-           setMinting(false);
-           return;
-        }
-        if (hasMintedWL2) {
-           setError('You have already minted in WL2 (FCFS).');
-           setMinting(false);
-           return;
-        }
-         if (!fcfsMintPrice) {
-           setError('Mint price could not be loaded.');
-           setMinting(false);
-           return;
-        }
-        tx = await contract.mintFCFS({ value: fcfsMintPrice });
-      } else if (currentPhase === "public") {
-        console.log('Initiating Public phase mint (ethers)');
-         if (!isEligiblePublic) {
-           setError('Not eligible for Public mint.');
-           setMinting(false);
-           return;
-        }
-        if (hasMintedPublic) {
-           setError('You have already minted in Public.');
-           setMinting(false);
-           return;
-        }
-         if (!publicMintPrice) {
-           setError('Mint price could not be loaded.');
-           setMinting(false);
-           return;
-        }
-        tx = await contract.mintPublic({ value: publicMintPrice });
+        
+        // Total minted sayısını güncelle
+        await refetchTotalSupply();
       } else {
-        console.log('Attempting mint in invalid phase (ethers):', currentPhase);
-        setError('Minting is not currently available.');
-        setMinting(false);
-        return;
+        if (!connectorClient) {
+          setMinting(false);
+          return;
+        }
+        const signer = clientToSigner(connectorClient);
+        const contract = new ethers.Contract(CONTRACT_ADDRESS, contractABI, signer);
+
+        let tx;
+        if (currentPhase === "wl") {
+          if (!isEligibleWL1 || hasMintedWL1 || !wlMintPrice) {
+            setMinting(false);
+            return;
+          }
+          tx = await contract.mintWL({ value: wlMintPrice });
+        } else if (currentPhase === "fcfs") {
+          if (!isEligibleWL2 || hasMintedWL2 || !fcfsMintPrice) {
+            setMinting(false);
+            return;
+          }
+          tx = await contract.mintFCFS({ value: fcfsMintPrice });
+        } else if (currentPhase === "public") {
+          if (!isEligiblePublic || hasMintedPublic || !publicMintPrice) {
+            setMinting(false);
+            return;
+          }
+          tx = await contract.mintPublic({ value: publicMintPrice });
+        }
+
+        await tx.wait();
+        
+        // State'leri güncelle
+        if (currentPhase === "wl") {
+          setHasMintedWL1(true);
+        } else if (currentPhase === "fcfs") {
+          setHasMintedWL2(true);
+        } else if (currentPhase === "public") {
+          setHasMintedPublic(true);
+        }
+        
+        // Total minted sayısını güncelle
+        await refetchTotalSupply();
       }
-
-      console.log('Transaction sent:', tx.hash);
-      // Wait for the transaction to be confirmed
-      await tx.wait();
-      console.log('Transaction confirmed:', tx.hash);
-      setError('Mint successful!');
-
-      // Successful mint may require updating statuses (e.g., re-fetching hasMinted states)
-      // useContractRead hooks will automatically refetch.
-
     } catch (err) {
-      console.error('Error during mint operation (ethers):', err);
-      // Make the error message more understandable if the user rejects
-      if (err.code === 4001) {
-        setError('Transaction rejected by wallet.');
-      } else {
-         setError(err?.reason || err?.message || 'Mint failed!');
-      }
+      console.error('Error during mint operation:', err);
     }
     setMinting(false);
-    console.log('handleMint finished (ethers)');
   };
 
   // Config yüklenmeden hiçbir şey gösterme
@@ -322,21 +327,6 @@ function MintPanel() {
     if (!config) {
       return <div className="text-white">Loading...</div>;
     }
-
-    // useContractRead hook'larından alınan boolean değerleri doğrudan kullan
-    const hasMintedWL1 = userHasMintedWL || false;
-    const hasMintedWL2 = userHasMintedFCFS || false; // Kontratta FCFS için hasMintedFCFS kullanılıyor
-    const hasMintedPublic = userHasMintedPublic || false;
-
-    const wlPrice = wlMintPrice ? Number(wlMintPrice) / 1e18 : 0;
-    const fcfsPrice = fcfsMintPrice ? Number(fcfsMintPrice) / 1e18 : 0;
-    const publicPrice = publicMintPrice ? Number(publicMintPrice) / 1e18 : 0;
-
-    const canMint = !minting && isConnected && (
-      (currentPhase === "wl" && isEligibleWL1 && !hasMintedWL1 && !!wlMintPrice) || 
-      (currentPhase === "fcfs" && isEligibleWL2 && !hasMintedWL2 && !!fcfsMintPrice) || 
-      (currentPhase === "public" && isEligiblePublic && !hasMintedPublic && !!publicMintPrice)
-    );
 
     return (
       <div className="w-full max-w-xl bg-[#2D292B] text-white px-10 pt-2 pb-8 rounded-2xl shadow-lg flex flex-col">
@@ -449,27 +439,21 @@ function MintPanel() {
             </div>
           </div>
         </div>
-        {error && (
-          <div className="bg-red-500 text-white p-3 rounded-lg mb-4 text-sm">
-            {error}
-          </div>
-        )}
 
-          <button
-            className={`w-full py-3 rounded-lg mt-6 text-[14px] font-bold transition ${
-            minting || !isConnected
+        <button
+          className={`w-full py-3 rounded-lg mt-6 text-[14px] font-bold transition ${
+            minting || !isConnected || 
+            (currentPhase === "wl" && (!isEligibleWL1 || hasMintedWL1)) || 
+            (currentPhase === "fcfs" && (!isEligibleWL2 || hasMintedWL2)) || 
+            (currentPhase === "public" && (!isEligiblePublic || hasMintedPublic))
               ? 'bg-[#9A9A9A] text-white'
-              : (currentPhase === "wl" && isEligibleWL1 && !hasMintedWL1) || 
-                (currentPhase === "fcfs" && isEligibleWL2 && !hasMintedWL2) || 
-                (currentPhase === "public" && isEligiblePublic && !hasMintedPublic)
-              ? 'bg-white text-black hover:bg-gray-100'
-              : 'bg-[#9A9A9A] text-white'
+              : 'bg-white text-black hover:bg-gray-100'
           }`}
           onClick={handleMint}
           disabled={minting || !isConnected || 
-            !((currentPhase === "wl" && isEligibleWL1 && !hasMintedWL1) || 
-              (currentPhase === "fcfs" && isEligibleWL2 && !hasMintedWL2) || 
-              (currentPhase === "public" && isEligiblePublic && !hasMintedPublic))}
+            (currentPhase === "wl" && (!isEligibleWL1 || hasMintedWL1)) || 
+            (currentPhase === "fcfs" && (!isEligibleWL2 || hasMintedWL2)) || 
+            (currentPhase === "public" && (!isEligiblePublic || hasMintedPublic))}
         >
           {minting ? 'Minting...' : 'Mint'}
         </button>
@@ -486,29 +470,13 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider chains={[abstractTestnet]} theme={darkTheme()}>
           {/* Sabit arka plan divi */}
-          <div style={{ backgroundImage: 'url("/noahbg.png")', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 0 }}></div>
+          <div style={{ backgroundImage: 'url("/bgnoah.png")', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 0 }}></div>
           {/* Ana içerik ve layout divi */}
           <div style={{ minHeight: '100vh', backgroundColor: 'transparent', zIndex: 1, position: 'relative' }}>
-            {/* Sabitlenmiş noah.png görseli (mint panelinin altında) */}
-            <img 
-              src="/noah.png" 
-              alt="Web" 
-              style={{ 
-                position: 'fixed', 
-                bottom: 0, 
-                left: 0, 
-                height: 'auto', /* height otomatik ayarlansın */
-                width: '50vw', /* Genişliği Responsive olarak %50 yapıldı */
-                maxWidth: '800px', /* Max genişlik biraz artırıldı */
-                objectFit: 'contain', /* Oran bozulmasın */
-                zIndex: 0, /* Mint panelinin altında kalsın */
-              }}
-              className="hidden md:block"
-            />
-            {/* Ana düzen divi, sadece mint paneli için */}
+            
             <div className="flex flex-col md:flex-row items-center md:justify-end justify-start w-full p-4 gap-4 md:gap-56 min-h-screen">
               {/* Mint panelinin bulunduğu sağ alan, soldan ve sağdan marjinli */}
-              <div className="flex flex-col items-center gap-4 w-full max-w-xl md:mr-[5vw] md:ml-[10vw] my-auto max-h-[90vh] overflow-y-auto md:mb-[10vh]" style={{ border: '5px solid #0F0', boxShadow: '0 0 10px #0F0, 0 0 20px #0F0, 0 0 30px #0F0, 0 0 40px #0F0', borderRadius: '10px' }}>
+              <div className="flex flex-col items-center gap-4 w-full max-w-xl md:mr-[2vw] my-auto max-h-[90vh] overflow-y-auto md:mb-[10vh]" style={{ border: '5px solid #0F0', boxShadow: '0 0 10px #0F0, 0 0 20px #0F0, 0 0 30px #0F0, 0 0 40px #0F0', borderRadius: '10px' }}>
                 <MintPanel />
               </div>
             </div>

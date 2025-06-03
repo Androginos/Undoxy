@@ -1,19 +1,21 @@
 {
-  "contractAddress": "0x89508Fcb102915C70945D8948aB8750C9ca09319",
+  "contractAddress": "0x9E956CE0c2ea0BA85BF06c9a0a6c13782d6c87d3",
   "deployerAddress": "0xf18d79589aB226bEd7f35Be727a6A587d359449b",
-  "wlStartTime": 1748836800,
-  "fcfsStartTime": 1748922600,
-  "publicStartTime": 1748922900,
+  "wlStartTime": 1748971500,
+  "fcfsStartTime": 1748972100,
+  "publicStartTime": 1748972700,
   "whitelist1": [
     "0xd0B8cCA831fB606B26BF58BC0bF9B1261a0c7915",
-    "0xf18d79589aB226bEd7f35Be727a6A587d359449b"
+    "0xf18d79589aB226bEd7f35Be727a6A587d359449b",
+    "0x250be0213e9bF83aB696aA08eF1639E17AD89c56",
+    "0xd034EB36810ce56f3A69C0E4642BbF3f4Bf3e488"
   ],
   "whitelist2": [
     "0x0bc2D87d544840908C4529eDccfde9F74B9bd68c"
   ],
-  "deployTime": "2025-06-02T03:59:29.132Z",
-  "chainId": 11124,
-  "chainName": "Abstract Testnet",
-  "rpcUrl": "https://abstract-testnet.g.alchemy.com/v2/8QMlEIAdNyu3vAlf8e7XhoyRRwBiaFr5",
-  "blockExplorerUrl": "https://sepolia.abscan.org"
+  "deployTime": "2025-06-03T00:03:32.095Z",
+  "chainId": 1337,
+  "chainName": "Monad Testnet",
+  "rpcUrl": "https://monad-testnet.g.alchemy.com/v2/8QMlEIAdNyu3vAlf8e7XhoyRRwBiaFr5",
+  "blockExplorerUrl": "https://explorer.testnet.monad.xyz"
 }
