@@ -177,10 +177,10 @@ async function deployContract(times) {
   console.log("Deploy eden adres:", deployer.address);
   console.log("Deploy eden bakiyesi:", ethers.formatEther(await deployer.provider.getBalance(deployer.address)), "ETH"); // Sembolü ETH olarak değiştir
 
-  const NFTFCFS = await ethers.getContractFactory("NFTFCFS");
+  const NOAHSARK = await ethers.getContractFactory("NOAHSARK");
   console.log("\nKontrat deploy ediliyor...");
   
-  const contract = await NFTFCFS.deploy(
+  const contract = await NOAHSARK.deploy(
     times.wlStart,
     times.fcfsStart,
     times.publicStart,

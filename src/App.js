@@ -17,7 +17,7 @@ import { ethers } from 'ethers';
 import { BrowserProvider, JsonRpcSigner } from 'ethers';
 
 
-const CONTRACT_ADDRESS = '0x8dCb51bF6BBc44d8993bD329b8FCc2d28c6E35aa';
+const CONTRACT_ADDRESS = '0xCeCb0BEC200C880331dEd8aE74411a3886d4d92a';
 
 
 // Wagmi Wallet Client to Ethers.js Signer adapter (from Wagmi docs)
