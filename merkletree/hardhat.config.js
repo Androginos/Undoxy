@@ -9,7 +9,7 @@ module.exports = {
       url: process.env.ABSTRACT_TESTNET_RPC_URL || "https://abstract-testnet.g.alchemy.com/v2/8QMlEIAdNyu3vAlf8e7XhoyRRwBiaFr5", // Kullanıcının sağladığı RPC URL
       accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
       chainId: 11124, // Abstract Testnet Chain ID
-    },
+    }
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,

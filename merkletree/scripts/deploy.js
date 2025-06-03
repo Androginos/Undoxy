@@ -15,13 +15,23 @@ const ROYALTY_RECEIVER = config.royaltyReceiver;
 function getTimestampFromTime(timeStr) {
     const [hours, minutes] = timeStr.split(':').map(Number);
     const now = new Date();
-    const targetDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
     
-    // Eğer belirtilen saat geçmişse, bir sonraki güne ayarla
-    if (targetDate < now) {
-        targetDate.setDate(targetDate.getDate() + 1);
+    // UTC saatini al
+    const currentUTCHours = now.getUTCHours();
+    const currentUTCMinutes = now.getUTCMinutes();
+    
+    // Hedef tarihi UTC olarak oluştur
+    const targetDate = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), hours, minutes));
+
+    // Eğer belirtilen saat şu anki UTC saatten önceyse, bir sonraki güne ayarla
+    if (hours < currentUTCHours || (hours === currentUTCHours && minutes <= currentUTCMinutes)) {
+        targetDate.setUTCDate(targetDate.getUTCDate() + 1);
     }
-    
+
+    // Saati doğru şekilde ayarla
+    targetDate.setUTCHours(hours);
+    targetDate.setUTCMinutes(minutes);
+
     return Math.floor(targetDate.getTime() / 1000);
 }
 
