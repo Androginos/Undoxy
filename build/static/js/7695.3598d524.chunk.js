@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunknoahsark_mint=self.webpackChunknoahsark_mint||[]).push([[7695],{7695:(a,n,s)=>{s.r(n),s.d(n,{default:()=>e.n});var e=s(2499)}}]);
