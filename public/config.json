@@ -1,8 +1,8 @@
 {
-  "contractAddress": "0xBF862bd509EeeB748A892771A2E50842328e09A2",
+  "contractAddress": "0xb01D2fdFA05Ae01FA4DC573f7a8e8d23fB77c360",
   "deployerAddress": "0x6Db969598D0c332d8046635BfD79fC8444dDfa5a",
-  "wlStartTime": 1749026700,
-  "fcfsStartTime": 1749027300,
+  "wlStartTime": 1749038400,
+  "fcfsStartTime": 1749039000,
   "publicStartTime": 1749074400,
   "whitelist1": [
     "0xd0B8cCA831fB606B26BF58BC0bF9B1261a0c7915",
@@ -14,7 +14,7 @@
     "0xd034EB36810ce56f3A69C0E4642BbF3f4Bf3e488",
     "0x250be0213e9bF83aB696aA08eF1639E17AD89c56"
   ],
-  "deployTime": "2025-06-04T08:43:58.744Z",
+  "deployTime": "2025-06-04T11:59:42.932Z",
   "chainId": 11124,
   "chainName": "Abstract Testnet",
   "rpcUrl": "https://abstract-testnet.g.alchemy.com/v2/8QMlEIAdNyu3vAlf8e7XhoyRRwBiaFr5",
