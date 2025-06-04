@@ -17,7 +17,7 @@ import { ethers } from 'ethers';
 import { BrowserProvider, JsonRpcSigner } from 'ethers';
 
 
-const CONTRACT_ADDRESS = '0xCeCb0BEC200C880331dEd8aE74411a3886d4d92a';
+const CONTRACT_ADDRESS = '0x6f52d665C7FBaaB27156F186e2129C77E65bB95A';
 
 
 // Wagmi Wallet Client to Ethers.js Signer adapter (from Wagmi docs)
@@ -99,7 +99,7 @@ function MintPanel() {
   const [wlCountdown, setWlCountdown] = useState({ hours: "00", minutes: "00", seconds: "00" });
   const [fcfsCountdown, setFcfsCountdown] = useState({ hours: "00", minutes: "00", seconds: "00" });
 
-  // Kontrattan kullanıcının mint durumunu oku
+  // Read user's mint status from contract
   const { data: userHasMintedWL } = useContractRead({
     address: CONTRACT_ADDRESS,
     abi: contractABI,
@@ -124,7 +124,7 @@ function MintPanel() {
     enabled: isConnected && currentPhase === "public", // Read only in Public phase and when connected
   });
 
-  // Contract okuma işlemleri
+  // Contract read operations
   const { data: wlMintPrice } = useContractRead({
     address: CONTRACT_ADDRESS,
     abi: contractABI,
@@ -155,27 +155,27 @@ function MintPanel() {
     functionName: 'maxSupply',
   });
 
-  // Daha önce mint yapılıp yapılmadığını kontrattan oku ve state'e ata
+  // Read if user has minted before and set state
   useEffect(() => {
     setHasMintedWL1(userHasMintedWL || false);
     setHasMintedWL2(userHasMintedFCFS || false);
     setHasMintedPublic(userHasMintedPublic || false);
   }, [userHasMintedWL, userHasMintedFCFS, userHasMintedPublic]);
 
-  // Config dosyasını yükle
+  // Load config file
   useEffect(() => {
     fetch('/config.json')
       .then(res => res.json())
       .then(data => setConfig(data));
   }, []);
 
-  // Fazı belirle (yalnızca config'ten)
+  // Determine phase (only from config)
   useEffect(() => {
     if (!config) return;
     const interval = setInterval(() => {
       const now = Math.floor(Date.now() / 1000);
       if (now < config.wlStartTime) {
-        setCurrentPhase("bekleme");
+        setCurrentPhase("waiting");
       } else if (now >= config.wlStartTime && now < config.fcfsStartTime) {
         setCurrentPhase("wl");
       } else if (now >= config.fcfsStartTime && now < config.publicStartTime) {
@@ -187,19 +187,19 @@ function MintPanel() {
     return () => clearInterval(interval);
   }, [config]);
 
-  // Sayaçlar (yalnızca config'ten)
+  // Timers (only from config)
   useEffect(() => {
     if (!config) return;
     const timer = setInterval(() => {
       const now = Math.floor(Date.now() / 1000);
-      // WL1 için sayaç: FCFS başlangıcına kadar
+      // Countdown for WL1: until FCFS starts
       const diffWL = config.fcfsStartTime - now;
       setWlCountdown({
         hours: diffWL > 0 ? String(Math.floor(diffWL / 3600)).padStart(2, '0') : "00",
         minutes: diffWL > 0 ? String(Math.floor((diffWL % 3600) / 60)).padStart(2, '0') : "00",
         seconds: diffWL > 0 ? String(diffWL % 60).padStart(2, '0') : "00"
       });
-      // WL2 için sayaç: Public başlangıcına kadar
+      // Countdown for WL2: until Public starts
       const diffFCFS = config.publicStartTime - now;
       setFcfsCountdown({
         hours: diffFCFS > 0 ? String(Math.floor(diffFCFS / 3600)).padStart(2, '0') : "00",
@@ -210,7 +210,7 @@ function MintPanel() {
     return () => clearInterval(timer);
   }, [config]);
 
-  // Whitelist eligibility (yalnızca config'ten)
+  // Whitelist eligibility (only from config)
   useEffect(() => {
     if (!address || !config) return;
     setIsEligibleWL1(config.whitelist1.map(a => a.toLowerCase()).includes(address.toLowerCase()));
@@ -218,7 +218,7 @@ function MintPanel() {
     setIsEligiblePublic(true);
   }, [address, config]);
 
-  // Mint işlemi
+  // Mint function
   const handleMint = async () => {
     setMinting(true);
 
@@ -228,7 +228,7 @@ function MintPanel() {
     }
 
     try {
-      // Abstract Wallet kontrolü
+      // Abstract Wallet check
       const isAbstractWallet = connectorClient?.type === 'abstract';
       
       if (isAbstractWallet) {
@@ -262,7 +262,7 @@ function MintPanel() {
 
         await tx.wait();
         
-        // State'leri güncelle
+        // Update states
         if (currentPhase === "wl") {
           setHasMintedWL1(true);
         } else if (currentPhase === "fcfs") {
@@ -271,7 +271,7 @@ function MintPanel() {
           setHasMintedPublic(true);
         }
         
-        // Total minted sayısını güncelle
+        // Update total minted
         await refetchTotalSupply();
       } else {
         if (!connectorClient) {
@@ -304,7 +304,7 @@ function MintPanel() {
 
         await tx.wait();
         
-        // State'leri güncelle
+        // Update states
         if (currentPhase === "wl") {
           setHasMintedWL1(true);
         } else if (currentPhase === "fcfs") {
@@ -313,7 +313,7 @@ function MintPanel() {
           setHasMintedPublic(true);
         }
         
-        // Total minted sayısını güncelle
+        // Update total minted
         await refetchTotalSupply();
       }
     } catch (err) {
@@ -322,7 +322,7 @@ function MintPanel() {
     setMinting(false);
   };
 
-  // Config yüklenmeden hiçbir şey gösterme
+  // Show nothing until config is loaded
   const renderContent = () => {
     if (!config) {
       return <div className="text-white">Loading...</div>;
@@ -469,17 +469,44 @@ function App() {
     <WagmiConfig config={config}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider chains={[abstractTestnet]} theme={darkTheme()}>
-          {/* Sabit arka plan divi */}
-          <div style={{ backgroundImage: 'url("/bgnoah.png")', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 0 }}></div>
-          {/* Ana içerik ve layout divi */}
+          {/* Fixed background div */}
+          <div style={{ 
+            backgroundImage: 'url("/bgnoah.png")', 
+            backgroundSize: 'cover', 
+            backgroundPosition: 'center', 
+            backgroundRepeat: 'no-repeat', 
+            position: 'fixed', 
+            top: 0, 
+            left: 0, 
+            width: '100vw', 
+            height: '100vh', 
+            zIndex: 0
+          }}></div>
+          {/* Main content and layout div */}
           <div style={{ minHeight: '100vh', backgroundColor: 'transparent', zIndex: 1, position: 'relative' }}>
-            
             <div className="flex flex-col md:flex-row items-center md:justify-end justify-start w-full p-4 gap-4 md:gap-56 min-h-screen">
-              {/* Mint panelinin bulunduğu sağ alan, soldan ve sağdan marjinli */}
-              <div className="flex flex-col items-center gap-4 w-full max-w-xl md:mr-[2vw] my-auto max-h-[90vh] overflow-y-auto md:mb-[10vh]" style={{ border: '5px solid #0F0', boxShadow: '0 0 10px #0F0, 0 0 20px #0F0, 0 0 30px #0F0, 0 0 40px #0F0', borderRadius: '10px' }}>
+              {/* The right area where the mint panel is located, with margin on the left and right */}
+              <div className="flex flex-col items-center gap-4 w-full max-w-xl md:mr-[2vw] my-auto max-h-[90vh] overflow-y-auto md:mb-[10vh]" style={{ border: '5px solid #0F0', boxShadow: '0 0 10px #0F0, 0 0 20px #0F0, 0 0 30px #0F0, 0 0 40px #0F0', borderRadius: '10px', zIndex: 2, position: 'relative' }}>
                 <MintPanel />
               </div>
             </div>
+            {/* Noah image pinned to the far left and bottom */}
+            {/*
+            <img
+              src="/noah.png"
+              alt="Noah"
+              style={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                width: "99vw",
+                height: "99vh",
+                objectFit: "cover",
+                zIndex: 0,
+                pointerEvents: "none",
+              }}
+            />
+            */}
           </div>
         </RainbowKitProvider>
       </QueryClientProvider>

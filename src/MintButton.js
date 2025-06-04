@@ -6,16 +6,17 @@ import contractAbi from "./contractABI.json";
 
 const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS;
 
-// Whitelist array'leri (küçük harfli olmalı!)
+// Whitelist arrays (should be lowercase!)
+// This list will be automatically updated by the deploy script
 const whitelist1 = [
-  // Bu liste deploy script tarafından otomatik güncellenecek
+  // This list will be automatically updated by the deploy script
 ].map(addr => addr.toLowerCase());
 
 const whitelist2 = [
-  // Bu liste deploy script tarafından otomatik güncellenecek
+  // This list will be automatically updated by the deploy script
 ].map(addr => addr.toLowerCase());
 
-// Merkle ağaçlarını oluştur
+// Create Merkle trees
 const leaves1 = whitelist1.map(addr => keccak256(addr));
 const tree1 = new MerkleTree(leaves1, keccak256, { sortPairs: true });
 
@@ -29,7 +30,7 @@ function getProof(address, tree) {
 
 export default function MintButton() {
   const [status, setStatus] = useState("");
-  const [currentPhase, setCurrentPhase] = useState("bekleme"); // wl, fcfs, public, bekleme
+  const [currentPhase, setCurrentPhase] = useState("waiting"); // wl, fcfs, public, waiting
   const [contract, setContract] = useState(null);
   const [mintPrice, setMintPrice] = useState(null);
 
@@ -53,13 +54,13 @@ export default function MintButton() {
       const fcfsStartTime = await contractInstance.fcfsStartTime();
       const publicStartTime = await contractInstance.publicStartTime();
 
-      // Mint fiyatlarını al
+      // Get mint prices
       const wlPrice = await contractInstance.wlMintPrice();
       const fcfsPrice = await contractInstance.fcfsMintPrice();
       const publicPrice = await contractInstance.publicMintPrice();
 
       if (currentTime < wlStartTime) {
-        setCurrentPhase("bekleme");
+        setCurrentPhase("waiting");
       } else if (currentTime >= wlStartTime && currentTime < fcfsStartTime) {
         setCurrentPhase("wl");
         setMintPrice(ethers.formatEther(wlPrice));
@@ -71,52 +72,52 @@ export default function MintButton() {
         setMintPrice(ethers.formatEther(publicPrice));
       }
     } catch (err) {
-      console.error("Faz kontrolü hatası:", err);
+      console.error("Phase check error:", err);
     }
   };
 
   const mintWL = async () => {
     try {
-      if (!window.ethereum) return setStatus("Metamask gerekli!");
-      setStatus("Whitelist mint işlemi gönderiliyor...");
+      if (!window.ethereum) return setStatus("Metamask required!");
+      setStatus("Whitelist mint transaction is being sent...");
       const price = await contract.wlMintPrice();
       const tx = await contract.mintWL({
         value: price
       });
       await tx.wait();
-      setStatus("Whitelist mint başarılı!");
+      setStatus("Whitelist mint successful!");
     } catch (err) {
-      setStatus("Hata: " + (err?.reason || err?.message));
+      setStatus("Error: " + (err?.reason || err?.message));
     }
   };
 
   const mintFCFS = async () => {
     try {
-      if (!window.ethereum) return setStatus("Metamask gerekli!");
-      setStatus("FCFS mint işlemi gönderiliyor...");
+      if (!window.ethereum) return setStatus("Metamask required!");
+      setStatus("FCFS mint transaction is being sent...");
       const price = await contract.fcfsMintPrice();
       const tx = await contract.mintFCFS({
         value: price
       });
       await tx.wait();
-      setStatus("FCFS mint başarılı!");
+      setStatus("FCFS mint successful!");
     } catch (err) {
-      setStatus("Hata: " + (err?.reason || err?.message));
+      setStatus("Error: " + (err?.reason || err?.message));
     }
   };
 
   const mintPublic = async () => {
     try {
-      if (!window.ethereum) return setStatus("Metamask gerekli!");
-      setStatus("Public mint işlemi gönderiliyor...");
+      if (!window.ethereum) return setStatus("Metamask required!");
+      setStatus("Public mint transaction is being sent...");
       const price = await contract.publicMintPrice();
       const tx = await contract.mintPublic({
         value: price
       });
       await tx.wait();
-      setStatus("Public mint başarılı!");
+      setStatus("Public mint successful!");
     } catch (err) {
-      setStatus("Hata: " + (err?.reason || err?.message));
+      setStatus("Error: " + (err?.reason || err?.message));
     }
   };
 
@@ -129,7 +130,7 @@ export default function MintButton() {
       case "public":
         return <button onClick={mintPublic}>Public Mint</button>;
       default:
-        return <button disabled>Mint Henüz Başlamadı</button>;
+        return <button disabled>Mint has not started yet</button>;
     }
   };
 
