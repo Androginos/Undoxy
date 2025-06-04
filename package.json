@@ -42,5 +42,8 @@
   },
   "devDependencies": {
     "typescript": "^5.0.4"
+  },
+  "engines": {
+    "node": "20.x"
   }
 }
