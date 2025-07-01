@@ -1,0 +1,109 @@
+.detective-runner-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.detective-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: transparent;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* Dokunma geri bildirimi için basit efekt */
+.detective-canvas:active {
+  opacity: 0.9;
+}
+
+.controls-info {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-size: 12px;
+  max-width: 250px;
+  z-index: 20;
+  pointer-events: auto;
+}
+
+.controls-info p {
+  margin: 4px 0;
+  font-size: 11px;
+  color: #fff;
+  font-weight: 400;
+}
+
+.controls-info p:first-child {
+  color: #4CAF50;
+}
+
+.controls-info p:last-child {
+  color: #FFC107;
+}
+
+
+
+/* Mobil cihazlar için özel stiller */
+@media (max-width: 768px) {
+  .controls-info {
+    bottom: 10px;
+    right: 10px;
+    padding: 8px 12px;
+    max-width: 200px;
+  }
+  
+  .controls-info p {
+    font-size: 10px;
+    margin: 3px 0;
+  }
+}
+
+/* Tablet cihazlar için özel stiller */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .controls-info {
+    bottom: 15px;
+    right: 15px;
+    padding: 9px 13px;
+    max-width: 225px;
+  }
+  
+  .controls-info p {
+    font-size: 11px;
+    margin: 3px 0;
+  }
+}
+
+/* Masaüstü için özel stiller */
+@media (min-width: 1025px) {
+  .controls-info {
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    max-width: 250px;
+  }
+  
+  .controls-info p {
+    font-size: 12px;
+    margin: 4px 0;
+  }
+}
+
+/* Basit fade-in animasyonu */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.detective-runner-container {
+  animation: fadeIn 0.5s ease-out;
+} 

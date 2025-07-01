@@ -1,0 +1,157 @@
+/* Shelf Icon Container */
+.shelf-icon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+  z-index: 20;
+  /* Sürekli düzensiz titreşim animasyonu */
+  animation: mysteriousShake 2.7s ease-in-out infinite;
+}
+
+/* Shelf Icon Image */
+.shelf-icon-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  /* Gizemli ışık efekti - titreşimle senkron */
+  filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.3)) 
+          drop-shadow(0 0 8px rgba(255, 165, 0, 0.15));
+  animation: mysteriousGlow 2.7s ease-in-out infinite;
+}
+
+/* Hover Effects */
+.shelf-icon-wrapper:hover {
+  transform: scale(1.1);
+  z-index: 100;
+  /* Hover'da animasyonları durdur */
+  animation: none;
+}
+
+.shelf-icon-wrapper:hover .shelf-icon-image {
+  /* Hover'da güçlü ışık efekti */
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.3))
+          drop-shadow(0 0 20px rgba(255, 215, 0, 0.8)) 
+          drop-shadow(0 0 40px rgba(255, 165, 0, 0.6));
+  animation: none; /* Hover'da glow animasyonunu durdur */
+}
+
+/* Contained Mode */
+.shelf-icon-wrapper.contained {
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+.shelf-icon-wrapper.contained .shelf-icon-image {
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+/* Match PNG Click Area */
+.shelf-icon-wrapper.match-png-clickable {
+  overflow: visible;
+}
+
+.shelf-icon-wrapper.match-png-clickable .shelf-icon-image {
+  pointer-events: auto;
+}
+
+/* Active/Click State */
+.shelf-icon-wrapper:active {
+  transform: scale(0.95);
+}
+
+/* Debug Container - Responsive positioning */
+.shelf-icon-debug-container {
+  position: absolute;
+  z-index: 20;
+}
+
+/* Gizemli Animasyonlar - Düzensiz ve Senkron */
+@keyframes mysteriousShake {
+  0% { 
+    transform: translateX(0) translateY(0); 
+  }
+  8% { 
+    transform: translateX(-0.5px) translateY(-0.3px); 
+  }
+  15% { 
+    transform: translateX(0.7px) translateY(0.4px); 
+  }
+  23% { 
+    transform: translateX(-0.3px) translateY(0.6px); 
+  }
+  31% { 
+    transform: translateX(0.4px) translateY(-0.5px); 
+  }
+  42% { 
+    transform: translateX(-0.6px) translateY(0.2px); 
+  }
+  54% { 
+    transform: translateX(0.3px) translateY(-0.4px); 
+  }
+  67% { 
+    transform: translateX(-0.4px) translateY(-0.2px); 
+  }
+  78% { 
+    transform: translateX(0.5px) translateY(0.3px); 
+  }
+  89% { 
+    transform: translateX(-0.2px) translateY(-0.5px); 
+  }
+  100% { 
+    transform: translateX(0) translateY(0); 
+  }
+}
+
+@keyframes mysteriousGlow {
+  0% {
+    filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.2)) 
+            drop-shadow(0 0 6px rgba(255, 165, 0, 0.1));
+  }
+  8% {
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.4)) 
+            drop-shadow(0 0 9px rgba(255, 165, 0, 0.2));
+  }
+  15% {
+    filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.3)) 
+            drop-shadow(0 0 7px rgba(255, 165, 0, 0.15));
+  }
+  23% {
+    filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.5)) 
+            drop-shadow(0 0 10px rgba(255, 165, 0, 0.25));
+  }
+  31% {
+    filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.25)) 
+            drop-shadow(0 0 6px rgba(255, 165, 0, 0.12));
+  }
+  42% {
+    filter: drop-shadow(0 0 7px rgba(255, 215, 0, 0.45)) 
+            drop-shadow(0 0 11px rgba(255, 165, 0, 0.22));
+  }
+  54% {
+    filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.3)) 
+            drop-shadow(0 0 8px rgba(255, 165, 0, 0.15));
+  }
+  67% {
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.35)) 
+            drop-shadow(0 0 9px rgba(255, 165, 0, 0.18));
+  }
+  78% {
+    filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.4)) 
+            drop-shadow(0 0 10px rgba(255, 165, 0, 0.2));
+  }
+  89% {
+    filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.25)) 
+            drop-shadow(0 0 7px rgba(255, 165, 0, 0.12));
+  }
+  100% {
+    filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.2)) 
+            drop-shadow(0 0 6px rgba(255, 165, 0, 0.1));
+  }
+} 

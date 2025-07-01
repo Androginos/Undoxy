@@ -1,0 +1,56 @@
+/* Virtual Canvas Container - Pixi.js mantığı */
+.virtual-canvas-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #79596e;
+  overflow: visible; /* Scale efekti için kırpılmayı engelle */
+  z-index: 0;
+}
+
+/* Sabit virtual canvas - 1920x1080 */
+.virtual-canvas {
+  position: absolute;
+  width: 1920px;
+  height: 1080px;
+  background-color: transparent;
+  /* transform: scale() - JavaScript tarafından ayarlanacak */
+  /* left, top - JavaScript tarafından ayarlanacak (centering için) */
+}
+
+/* Canvas background - her zaman 1920x1080 */
+.canvas-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  object-fit: cover; /* Tam doldurmak için */
+  z-index: 1;
+}
+
+/* Tüm öğeler artık 1920x1080 koordinat sisteminde */
+/* Position absolute ile direct pixel coordinate'lar kullanılacak */
+/* Her öğe kendi style prop'unda position alacak */
+
+/* Hover durumunda z-index artırma - Hover efekti olan itemlar en üstte */
+.magnifier-wrapper:hover {
+  z-index: 1000 !important; /* Hover durumunda en üste çık */
+}
+
+.files-wrapper:hover {
+  z-index: 1000 !important; /* Hover durumunda en üste çık */
+}
+
+.shelf-wrapper:hover {
+  z-index: 1000 !important; /* Hover durumunda en üste çık */
+}
+
+/* Tüm wrapper'lar için genel hover kuralı */
+.item-wrapper:hover {
+  z-index: 1000 !important; /* Hover durumunda en üste çık */
+}
+
+ 

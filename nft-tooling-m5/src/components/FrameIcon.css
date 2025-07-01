@@ -1,0 +1,127 @@
+/* Debug container - responsive pozisyonlama için */
+.frame-icon-debug-container {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 30;
+  pointer-events: none;
+  
+  /* Debug çerçeve - kırmızı noktalı */
+  border: 2px dashed red;
+  box-sizing: border-box;
+  
+  /* Frame icon için relative pozisyonlama alanı */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.frame-icon-wrapper {
+  overflow: visible;
+  display: inline-block;
+  border-radius: 0; /* PNG şekline göre hover için circular kaldırıldı */
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform, box-shadow;
+  perspective: 1000px;
+  transform-origin: center;
+  pointer-events: none; /* Wrapper'ın kendisi tıklanamaz */
+  z-index: 25; /* Normal durumda MagnifyingGlass'dan biraz yüksek */
+  
+  /* Responsive pozisyonlama - container içinde */
+  position: relative;
+}
+
+.frame-icon-image {
+  width: 100%; /* PNG'nin tam boyutu - wrapper ile aynı */
+  height: 100%; /* PNG'nin tam boyutu - wrapper ile aynı */
+  object-fit: contain; /* Preserve aspect ratio and prevent clipping */
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              filter 0.35s ease;
+  will-change: transform, filter;
+  transform-origin: center;
+  backface-visibility: hidden;
+  border-radius: 0; /* Keep icon shape intact */
+  pointer-events: auto; /* Sadece PNG görseli tıklanabilir */
+  cursor: pointer;
+}
+
+/* Hover Effects */
+.frame-icon-wrapper:hover {
+  transform: scale(1.25) translateZ(0);
+  z-index: 90; /* Area-4 hover durumunda yüksek z-index */
+}
+
+.frame-icon-wrapper:hover .frame-icon-image {
+  transform: scale(1.1) rotateZ(5deg);
+  filter: brightness(1.2) contrast(1.1) saturate(1.2) drop-shadow(0 0 8px rgba(0, 212, 255, 0.6));
+}
+
+/* Active/Click Effect */
+.frame-icon-wrapper:active {
+  transform: scale(1.1) translateZ(0);
+  transition: transform 0.1s ease;
+}
+
+/* Pulse efektleri kaldırıldı - sadece PNG şekline göre hover */
+
+/* Pulse animation */
+@keyframes pulse-ring-frame {
+  0%, 100% {
+    transform: scale(0.8);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.1;
+  }
+}
+
+/* Responsive adjustments - cihaz tipine göre pozisyonlama */
+@media (max-width: 768px) {
+  .frame-icon-debug-container {
+    /* Mobile - ekranın belirli bir bölgesinde konumlandır */
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 15vh 10vw; /* Üstten 15%, soldan 10% */
+  }
+  
+  .frame-icon-wrapper:hover {
+    transform: scale(1.4) translateZ(0);
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1440px) {
+  .frame-icon-debug-container {
+    /* Tablet - merkez yakını ama biraz yukarı */
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 30vh; /* Üstten 30% */
+  }
+  
+  .frame-icon-wrapper:hover {
+    transform: scale(1.3) translateZ(0);
+  }
+}
+
+@media (min-width: 1441px) {
+  .frame-icon-debug-container {
+    /* Desktop - mevcut pozisyon korunacak */
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 44.3vh 67.1vw; /* Mevcut koordinatlar */
+    transform: translate(-50%, -50%); /* Merkez ayarı */
+  }
+} 
+
+/* Contained mode - Area içinde kullanım için */
+.frame-icon-wrapper.contained {
+  position: relative;
+  /* Debug container'ın tüm stillerini iptal et */
+}
+
+.frame-icon-wrapper.contained:hover {
+  transform: scale(1.15) translateZ(0); /* Daha yumuşak büyüme */
+  z-index: 90; /* Area-4 hover durumunda yüksek z-index */
+} 

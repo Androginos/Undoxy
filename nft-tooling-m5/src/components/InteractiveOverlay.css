@@ -1,0 +1,307 @@
+/* Interactive Overlay Container */
+.interactive-overlay-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10; /* Area'ların base z-index'i düşürüldü */
+  pointer-events: none;
+}
+
+/* Base Interactive Debug Area */
+.interactive-debug-area {
+  position: absolute;
+  pointer-events: auto;
+  border: 2px dashed;
+  border-radius: 8px;
+  background: transparent;
+  box-sizing: border-box;
+  z-index: 15; /* Area'ların kendi z-index'i */
+  
+  /* Debug label için padding */
+  padding: 5px;
+  
+  /* Hover efekti */
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.interactive-debug-area:hover {
+  background: transparent;
+  transform: scale(1.05);
+}
+
+/* Area-4 hover durumunda yüksek z-index */
+.area-4:hover {
+  z-index: 90; /* Hover durumunda yüksek z-index */
+}
+
+/* Debug Label */
+.debug-label {
+  position: absolute;
+  top: -25px;
+  left: 0;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+/* Area Content */
+.area-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Color-specific borders */
+.interactive-debug-area[data-color="red"] {
+  border-color: #ff4757;
+}
+
+.interactive-debug-area[data-color="blue"] {
+  border-color: #3742fa;
+}
+
+.interactive-debug-area[data-color="green"] {
+  border-color: #2ed573;
+}
+
+.interactive-debug-area[data-color="yellow"] {
+  border-color: #ffa502;
+}
+
+.interactive-debug-area[data-color="purple"] {
+  border-color: #a55eea;
+}
+
+.interactive-debug-area[data-color="orange"] {
+  border-color: #ff6348;
+}
+
+.interactive-debug-area[data-color="cyan"] {
+  border-color: #26d0ce;
+}
+
+.interactive-debug-area[data-color="pink"] {
+  border-color: #ff3838;
+}
+
+/* Area-6 özel stil - artık gerekli değil, tüm area'lar şeffaf */
+
+/* =========================== */
+/* RESPONSIVE POSITIONING      */
+/* =========================== */
+
+/* DESKTOP - 3 ana pozisyon kategorisi */
+@media (min-width: 1441px) {
+  /* Area 1 - Red - Sol üst */
+  .area-1.desktop {
+    top: 10vh;
+    left: 10vw;
+    width: 200px;
+    height: 150px;
+  }
+  
+  /* Area 2 - Blue - Sağ üst */
+  .area-2.desktop {
+    top: 15vh;
+    right: 43vw;
+    width: 180px;
+    height: 160px;
+  }
+  
+  /* Area 3 - Green - Sol merkez */
+  .area-3.desktop {
+    top: 40vh;
+    left: 8vw;
+    width: 160px;
+    height: 120px;
+  }
+  
+  /* Area 4 - Yellow - Sağ merkez */
+  .area-4.desktop {
+    top: 12.35vh;
+    right: 23.05vw;
+    width: 400px;
+    height: 300px;
+  }
+  
+  /* Area 5 - Purple - Sol alt */
+  .area-5.desktop {
+    bottom: 44vh;
+    left: 34vw;
+    width: 190px;
+    height: 160px;
+  }
+  
+  /* Area 6 - Orange - Sağ alt */
+  .area-6.desktop {
+    bottom: 46vh;
+    right: 22.5vw;
+    width: 400px;
+    height: 180px;
+  }
+  
+  /* Area 7 - Cyan - Merkez üst */
+  .area-7.desktop {
+    top: 0vh;
+    left: 43%;
+    transform: translateX(-50%);
+    width: 350px;
+    height: 350px;
+  }
+  
+  /* Area 8 - Pink - Merkez alt */
+  .area-8.desktop {
+    bottom: 18.5vh;
+    left: 30.9%;
+    transform: translateX(-50%);
+    width: 235px;
+    height: 220px;
+  }
+}
+
+/* TABLET */
+@media (min-width: 769px) and (max-width: 1440px) {
+  /* Area 1 - Red */
+  .area-1.tablet {
+    top: 12vh;
+    left: 8vw;
+    width: 150px;
+    height: 120px;
+  }
+  
+  /* Area 2 - Blue */
+  .area-2.tablet {
+    top: 18vh;
+    right: 34vw;
+    width: 200px;
+    height: 200px;
+  }
+  
+  /* Area 3 - Green */
+  .area-3.tablet {
+    top: 45vh;
+    left: 6vw;
+    width: 130px;
+    height: 100px;
+  }
+  
+  /* Area 4 - Yellow */
+  .area-4.tablet {
+    top: 16vh;
+    right: -0vw;
+    width: 346px;
+    height: 346px;
+  }
+  
+  /* Area 5 - Purple */
+  .area-5.tablet {
+    bottom: 50vh;
+    left: 19vw;
+    width: 190px;
+    height: 190px;
+  }
+  
+  /* Area 6 - Orange */
+  .area-6.tablet {
+    bottom: 55vh;
+    right: -4vw;
+    width: 420px;
+    height: 120px;
+  }
+  
+  /* Area 7 - Cyan */
+  .area-7.tablet {
+    top: 8vh;
+    left: 36%;
+    transform: translateX(-50%);
+    width: 360px;
+    height: 360px;
+  }
+  
+  /* Area 8 - Pink */
+  .area-8.tablet {
+    bottom: 30vh;
+    left: 13.3%;
+    transform: translateX(-50%);
+    width: 270px;
+    height: 270px;
+  }
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  /* Area 1 - Red */
+  .area-1.mobile {
+    top: 8vh;
+    left: 5vw;
+    width: 100px;
+    height: 80px;
+  }
+  
+  /* Area 2 - Blue */
+  .area-2.mobile {
+    top: 30vh;
+    right: 30vw;
+    width: 110px;
+    height: 110px;
+  }
+  
+  /* Area 3 - Green */
+  .area-3.mobile {
+    top: 25vh;
+    left: 3vw;
+    width: 85px;
+    height: 70px;
+  }
+  
+  /* Area 4 - Yellow */
+  .area-4.mobile {
+    top: 32vh;
+    right: 2vw;
+    width: 130px;
+    height: 130px;
+  }
+  
+  /* Area 5 - Purple */
+  .area-5.mobile {
+    top: 43vh;
+    left: 15vw;
+    width: 105px;
+    height: 85px;
+  }
+  
+  /* Area 6 - Orange */
+  .area-6.mobile {
+    top: 41vh;
+    right: 5vw;
+    width: 100px;
+    height: 100px;
+  }
+  
+  /* Area 7 - Cyan */
+  .area-7.mobile {
+    top: 25vh;
+    left: 35%;
+    transform: translateX(-50%);
+    width: 170px;
+    height: 170px;
+  }
+  
+  /* Area 8 - Pink */
+  .area-8.mobile {
+    bottom: 34vh;
+    left: 16%;
+    transform: translateX(-50%);
+    width: 140px;
+    height: 140px;
+  }
+} 

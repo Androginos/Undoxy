@@ -1,0 +1,197 @@
+/* Reset & Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* Simplified responsive breakpoints - 3 main types */
+  --breakpoint-mobile: 768px;   /* Mobile devices */
+  --breakpoint-tablet: 1440px;  /* Tablet devices */
+  --breakpoint-desktop: 1441px; /* Desktop devices */
+  
+  /* Aspect ratio targets */
+  --aspect-mobile: 2/3;         /* Mobile portrait */
+  --aspect-tablet: 3/4;         /* Tablet portrait */
+  --aspect-desktop: 16/9;       /* Desktop landscape */
+  
+  /* Animation durations */
+  --duration-fast: 0.15s;
+  --duration-normal: 0.3s;
+  --duration-slow: 0.6s;
+  
+  /* Z-index layers */
+  --z-background: 0;
+  --z-content: 10;
+  --z-interactive: 20;
+  --z-overlay: 30;
+  --z-modal: 40;
+  
+  /* Blockchain colors */
+  --color-primary: #00d4ff;
+  --color-secondary: #ff6b35;
+  --color-success: #00ff88;
+  --color-warning: #ffb800;
+  --color-error: #ff4757;
+  --color-dark: #1a1a2e;
+  --color-darker: #16213e;
+  --color-light: #ffffff;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #79596e;
+  color: var(--color-light);
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+/* Responsive container utility */
+.responsive-container {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background image responsive behavior */
+.bg-responsive {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: var(--z-background);
+}
+
+/* Desktop 16:9 optimization for 1920x1080 */
+@media (min-width: 1441px) {
+  .bg-responsive {
+    object-fit: cover;
+    object-position: center center;
+    width: 100vw;
+    height: 100vh;
+    transform: scale(1);
+    
+    /* Force aspect ratio match */
+    @supports (aspect-ratio: 16/9) {
+      aspect-ratio: 16/9;
+    }
+  }
+  
+  /* For 16:9 screens (exact match) */
+  @media (aspect-ratio: 16/9) {
+    .bg-responsive {
+      object-fit: fill; /* Exact fit for 1920x1080 screens */
+      transform: none;
+    }
+  }
+  
+  /* For wider than 16:9 screens */
+  @media (min-aspect-ratio: 16/9) {
+    .bg-responsive {
+      object-fit: cover;
+      width: 100vw;
+      height: auto;
+      min-height: 100vh;
+    }
+  }
+  
+  /* For taller than 16:9 screens */
+  @media (max-aspect-ratio: 16/9) {
+    .bg-responsive {
+      object-fit: cover;
+      width: auto;
+      height: 100vh;
+      min-width: 100vw;
+    }
+  }
+}
+
+/* Interactive area positioning */
+.interactive-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: var(--z-interactive);
+  pointer-events: none;
+}
+
+.interactive-area {
+  position: absolute;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: all var(--duration-normal) ease;
+}
+
+/* Pulsing glow animation for blockchain elements */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px var(--color-primary);
+    opacity: 0.7;
+  }
+  50% {
+    box-shadow: 0 0 20px var(--color-primary), 0 0 30px var(--color-primary);
+    opacity: 1;
+  }
+}
+
+.blockchain-pulse {
+  animation: pulse-glow 2s infinite;
+}
+
+/* Simplified responsive utilities - 3 main device types */
+@media (max-width: 768px) {
+  .mobile-only { display: block; }
+  .tablet-only, .desktop-only { display: none; }
+  
+  body {
+    font-size: 14px;
+    -webkit-text-size-adjust: 100%;
+  }
+  
+  .responsive-container {
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height for mobile */
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1440px) {
+  .tablet-only { display: block; }
+  .mobile-only, .desktop-only { display: none; }
+  
+  body {
+    font-size: 16px;
+  }
+  
+  .responsive-container {
+    height: 100vh;
+  }
+}
+
+@media (min-width: 1441px) {
+  .desktop-only { display: block; }
+  .mobile-only, .tablet-only { display: none; }
+  
+  body {
+    font-size: 18px;
+  }
+  
+  .responsive-container {
+    height: 100vh;
+  }
+} 

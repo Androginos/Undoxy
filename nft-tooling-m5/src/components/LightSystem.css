@@ -1,0 +1,25 @@
+.light-system-container {
+  position: absolute;
+  top: 51px;    /* Canvas içindeki Y pozisyonu - değiştirilebilir */
+  left: 680px;   /* Canvas içindeki X pozisyonu - değiştirilebilir */
+  width: 477px;
+  height: 463px;
+  z-index: 5; /* Item'ların altında ama background'ın üstünde */
+  pointer-events: none; /* Tıklamaları geçir */
+}
+
+.light-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 477px;
+  height: 463px;
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out;
+  pointer-events: none;
+  object-fit: contain;
+}
+
+.light-image.active {
+  opacity: 1;
+} 
