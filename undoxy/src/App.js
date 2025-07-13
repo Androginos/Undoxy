@@ -381,6 +381,9 @@ function App() {
                 <div className="quick-start-inline">
                   <strong>Quick Start:</strong> 1. Add background photo → 2. Enter X username → + Click/Enter → 3. Drag and Resize PFPs → 4. Save with Download
                 </div>
+                <div className="credits-text">
+                  Undoxy by Kutsal for Monad Community
+                </div>
               </div>
             )}
           </div>

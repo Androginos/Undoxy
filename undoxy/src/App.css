@@ -372,6 +372,12 @@ input:focus {
     line-height: 1.1;
   }
 
+  .credits-text {
+    font-size: 8px !important;
+    margin-top: 4px;
+    line-height: 1.1;
+  }
+
   .canvas-container {
     padding: 6px !important;
     padding-bottom: 250px !important;
@@ -492,6 +498,15 @@ input:focus {
   margin-top: 6px;
   line-height: 1.4;
   font-weight: 400;
+}
+
+.credits-text {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  text-align: center;
+  line-height: 1.2;
+  font-style: italic;
 }
 
 
